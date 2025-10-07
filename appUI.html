@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Beautiful App UI — Demo</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================
+       Variables & Base
+       ========================== */
+    :root{
+      --bg: #0f1724;               /* deep background */
+      --card: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.06);
+      --muted: rgba(255,255,255,0.6);
+      --accent1: #6EE7B7;          /* soft mint */
+      --accent2: #60A5FA;          /* soft blue */
+      --accent3: #A78BFA;          /* purple */
+      --glass-border: rgba(255,255,255,0.08);
+      --radius: 12px;
+      --glass-blur: 10px;
+      --shadow-1: 0 6px 18px rgba(2,6,23,0.6);
+      --transition: 260ms cubic-bezier(.2,.9,.3,1);
+    }
+
+    *{box-sizing: border-box}
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(1200px 600px at 10% 10%, rgba(96,165,250,0.06), transparent 8%),
+        radial-gradient(800px 400px at 90% 90%, rgba(167,139,250,0.04), transparent 6%),
+        var(--bg);
+      color: #E6EEF6;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.35;
+      padding: 24px;
+    }
+
+    /* ==========================
+       Layout
+       ========================== */
+    .app {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 20px;
+      height: calc(100vh - 48px);
+      align-items: start;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow-1);
+      display:flex;
+      flex-direction:column;
+      gap: 14px;
+      min-height: 0;
+    }
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .logo {
+      width:44px;height:44px;border-radius:10px;
+      background: linear-gradient(135deg,var(--accent1),var(--accent3));
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;color:#072020;
+      box-shadow:0 6px 18px rgba(103,128,255,0.12);
+    }
+    .brand h1{font-size:16px;margin:0;font-weight:700}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    .nav {
+      display:flex;flex-direction:column;gap:6px;padding-top:6px;
+      overflow:auto;
+    }
+    .nav a{
+      text-decoration:none;color:inherit;
+      padding:10px 12px;border-radius:10px;
+      display:flex;align-items:center;gap:10px;font-weight:600;
+      transition: background var(--transition), transform var(--transition);
+      color: rgba(230,238,246,0.9);
+    }
+    .nav a:hover{ background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); transform:translateY(-2px)}
+    .nav a .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(90deg,var(--accent2),var(--accent3))}
+
+    .profile {
+      margin-top:auto;
+      display:flex;gap:12px;align-items:center;padding-top:10px;border-top:1px solid var(--glass-border);
+    }
+    .avatar {
+      width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#FDE68A,#FCA5A5);
+      display:flex;align-items:center;justify-content:center;font-weight:700;color:#2b0f07;
+    }
+    .profile small {display:block;color:var(--muted);font-size:12px}
+    .profile b{display:block;font-size:13px}
+
+    /* Main content */
+    .main {
+      min-height: 0;
+      display:flex;flex-direction:column;gap:16px;
+    }
+
+    .topbar {
+      display:flex;align-items:center;gap:12px;justify-content:space-between;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: 14px;padding:12px 16px;border:1px solid var(--glass-border);
+      box-shadow: 0 8px 30px rgba(2,6,23,0.55);
+    }
+
+    .search {
+      display:flex;align-items:center;gap:8px;
+      background: rgba(255,255,255,0.02); padding:10px;border-radius:10px;min-width:280px;
+    }
+    .search input{
+      border:0;background:transparent;outline:none;color:inherit;font-weight:600;
+    }
+
+    .actions {display:flex;align-items:center;gap:8px}
+
+    .btn {
+      border:0;padding:8px 12px;border-radius:10px;font-weight:700;cursor:pointer;
+      background: linear-gradient(90deg,var(--accent2),var(--accent3));
+      color:#061124; box-shadow: 0 8px 20px rgba(96,165,250,0.12);
+      transition: transform var(--transition);
+    }
+    .btn:active{ transform: translateY(1px) }
+
+    /* Content grid */
+    .content-grid {
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--card); border-radius:14px; padding:16px; border:1px solid var(--glass-border);
+      backdrop-filter: blur(6px); box-shadow: 0 12px 30px rgba(2,6,23,0.5);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(2,6,23,0.6); }
+
+    .card h3 { margin:0 0 8px 0; font-size:16px; }
+    .card p { margin:0; color:var(--muted); font-size:13px; }
+
+    .kpi {
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .kpi .value { font-size:20px;font-weight:800 }
+    .kpi .trend { font-size:12px; color: var(--muted) }
+
+    /* list / table like card */
+    .list { display:flex;flex-direction:column; gap:10px; margin-top:12px }
+    .list .row{ display:flex;justify-content:space-between;gap:10px; padding:10px;border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+    .list .row small{ color:var(--muted) }
+
+    /* form controls */
+    .field { display:flex;flex-direction:column; gap:6px }
+    input, textarea, select {
+      padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);
+      background: rgba(0,0,0,0.18); color:inherit; outline:none; font-weight:600;
+      transition: box-shadow var(--transition), transform var(--transition);
+    }
+    input:focus, textarea:focus, select:focus { box-shadow: 0 6px 20px rgba(96,165,250,0.06); transform: translateY(-2px) }
+
+    /* floating action button */
+    .fab {
+      position: fixed; right: 32px; bottom: 32px;
+      width:64px;height:64px;border-radius:20px;display:flex;align-items:center;justify-content:center;
+      background: linear-gradient(135deg,var(--accent1),var(--accent2)); color:#042022;font-weight:800;
+      box-shadow: 0 18px 40px rgba(96,165,250,0.12); cursor:pointer; border: none;
+    }
+
+    /* responsive */
+    @media (max-width: 980px){
+      .app { grid-template-columns: 1fr; height:auto; }
+      .content-grid { grid-template-columns: repeat(2, 1fr); }
+      .sidebar { order:2 }
+      .main { order:1 }
+      .fab { right: 18px; bottom: 18px }
+    }
+    @media (max-width: 640px){
+      .content-grid { grid-template-columns: 1fr; }
+      .search { min-width: 0; width:100%; }
+      .topbar { flex-direction: column; align-items:stretch; gap:8px }
+    }
+
+    /* small helpers */
+    .muted { color:var(--muted) }
+    .tiny { font-size:12px }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Sidebar">
+      <div class="brand">
+        <div class="logo">AI</div>
+        <div>
+          <h1>Atlas</h1>
+          <p>Productivity suite</p>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Main navigation">
+        <a href="#"><span class="dot"></span> Dashboard</a>
+        <a href="#"><span class="dot"></span> Projects</a>
+        <a href="#"><span class="dot"></span> Analytics</a>
+        <a href="#"><span class="dot"></span> Team</a>
+        <a href="#"><span class="dot"></span> Billing</a>
+      </nav>
+
+      <div class="profile">
+        <div class="avatar">DD</div>
+        <div>
+          <b>Debosman</b>
+          <small class="muted">Product Designer</small>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="topbar">
+        <div style="display:flex; gap:12px; align-items:center;">
+          <div class="search" role="search" aria-label="Search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <input placeholder="Search projects, teams..." />
+          </div>
+
+          <div class="muted tiny">Welcome back — here's what's happening</div>
+        </div>
+
+        <div class="actions">
+          <button class="btn">New Project</button>
+          <button class="btn" style="background:transparent;border:1px solid var(--glass-border;color:var(--muted))">Export</button>
+        </div>
+      </div>
+
+      <section class="content-grid" aria-label="Content">
+        <!-- KPI card -->
+        <article class="card">
+          <h3>Overview</h3>
+          <div class="kpi" style="margin-top:12px">
+            <div>
+              <div class="value">2,314</div>
+              <div class="muted tiny">Active users</div>
+            </div>
+            <div style="text-align:right">
+              <div class="muted tiny">Growth</div>
+              <div class="muted tiny">+12.4% this month</div>
+            </div>
+          </div>
+
+          <div class="list">
+            <div class="row">
+              <div>
+                <strong>Projects</strong>
+                <small class="muted">12 active</small>
+              </div>
+              <div class="muted tiny">Updated 2h ago</div>
+            </div>
+            <div class="row">
+              <div><strong>Storage</strong><small class="muted">56 / 100 GB</small></div>
+              <div class="muted tiny">Upgrade</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Recent activity card -->
+        <article class="card">
+          <h3>Recent Activity</h3>
+          <div style="margin-top:12px">
+            <div class="list">
+              <div class="row"><div><strong>Design system</strong><small class="muted">Updated color tokens</small></div><div class="muted tiny">10 min</div></div>
+              <div class="row"><div><strong>Release v1.8</strong><small class="muted">Deployed to production</small></div><div class="muted tiny">1 day</div></div>
+              <div class="row"><div><strong>Onboarding</strong><small class="muted">New team invited</small></div><div class="muted tiny">3 days</div></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Form / quick create -->
+        <article class="card">
+          <h3>Create a task</h3>
+          <form style="margin-top:12px; display:flex;flex-direction:column;gap:10px">
+            <div class="field">
+              <label class="muted tiny">Title</label>
+              <input placeholder="Design new landing page" />
+            </div>
+
+            <div class="field">
+              <label class="muted tiny">Assignee</label>
+              <select>
+                <option>Debosman</option>
+                <option>Riya</option>
+                <option>Arun</option>
+              </select>
+            </div>
+
+            <div style="display:flex;gap:8px;">
+              <button class="btn" type="button">Add</button>
+              <button class="btn" type="button" style="background:transparent;border:1px solid var(--glass-border);color:var(--muted)">Cancel</button>
+            </div>
+          </form>
+        </article>
+
+        <!-- Wide card (span across columns) -->
+        <article class="card" style="grid-column: 1 / -1;">
+          <h3>Project Insights</h3>
+          <p class="muted" style="margin-top:8px">Quick summary of ongoing work and upcoming deadlines.</p>
+
+          <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
+            <div style="flex:1;min-width:200px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:12px;border-radius:10px">
+              <strong>Active Sprints</strong>
+              <div class="muted tiny" style="margin-top:8px">3 running</div>
+            </div>
+            <div style="flex:1;min-width:200px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:12px;border-radius:10px">
+              <strong>Open Bugs</strong>
+              <div class="muted tiny" style="margin-top:8px">21 items</div>
+            </div>
+            <div style="flex:1;min-width:200px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);padding:12px;border-radius:10px">
+              <strong>Release ETA</strong>
+              <div class="muted tiny" style="margin-top:8px">Sep 30, 2025</div>
+            </div>
+          </div>
+
+        </article>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- Floating action -->
+  <button class="fab" aria-label="Create new">+</button>
+
+</body>
+</html>
